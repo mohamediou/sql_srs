@@ -2,7 +2,14 @@ import streamlit as st
 import pandas as pd
 import duckdb
 
-st.write("Hello world")
+st.write("Apprentissage SQL")
+
+option=st.selectbox("choisissez une option de contact",
+                    ("Email","Portable","Fixe"),
+                    placeholder='Choisissez une option',
+                    index=None)
+
+
 data = {'a' : [1,2,3], 'b' : [4,5,6]}
 DF = pd.DataFrame(data)
 
