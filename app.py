@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import duckdb
 
-st.writ("Hello world")
+st.write("Hello world")
 data = {'a' : [1,2,3], 'b' : [4,5,6]}
 DF = pd.DataFrame(data)
 
