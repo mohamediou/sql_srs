@@ -1,31 +1,55 @@
-import streamlit as st
 import pandas as pd
 import duckdb
+import streamlit as st
+import io
 
-st.write("Apprentissage SQL")
+csv='''
+beverage,price
+orange juice,2.5
+Expresso,2
+Tea,3
+'''
+beverages=pd.read_csv(io.StringIO(csv))
 
-option=st.selectbox("choisissez une option de contact",
-                    ("Email","Portable","Fixe"),
-                    placeholder='Choisissez une option',
-                    index=None)
+csv2='''
+food_item,food_price
+cookie juice,2.5
+chocolatine,2
+muffin,3
+'''
+food_items=pd.read_csv(io.StringIO(csv2))
+
+answer = """
+SELECT * FROM beverages
+CROSS JOIN food_items
+"""
+solution = duckdb.query(answer).df()
+
+with st.sidebar:
+    option=st.selectbox("What would you ike to review ?",
+                        ("Joins","GroupBy","Windows Functions"),
+                        placeholder='Select a theme...',
+                        index=None)
+    st.write(f"You selected : {option}")
 
 
-data = {'a' : [1,2,3], 'b' : [4,5,6]}
-DF = pd.DataFrame(data)
+st.header("entrer votre code : ")
+query=st.text_area(label="Votre code SQL ici",key="user_input")
 
-ong1, ong2, ong3 = st.tabs(["Onglet 1","Onglet 2","Onglet 3"])
-
-with ong1:
-    st.write("Voici la table DF :")
-    st.dataframe(DF)
-    query=st.text_area(label= "Quelle requete souhaitez vous faire ?")
-    result = duckdb.query(query)
-    st.write(f'voici votre requete : {query}')
+if query:
+    result = duckdb.query(query).df()
     st.dataframe(result)
 
+tab2,tab3 = st.tabs(("Tables","Solution"))
 
-with ong2:
-    st.write("vous etes dans l'onglet 2")
+with tab2:
+    st.write("table: beverages")
+    st.dataframe(beverages)
+    st.write("table: food_items")
+    st.dataframe(food_items)
+    st.write("expected : ")
+    st.dataframe(solution)
 
-with ong3:
-    st.write("vous etes dans l'onglet 3")
+
+with tab3:
+    st.write(answer)
