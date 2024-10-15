@@ -46,22 +46,24 @@ if query:
     try:
         result = result[solution_df.columns]
         st.dataframe(result.compare(solution_df))
-    except:
+    except KeyError as e:
+        st.write(f"Erreur de colonne : {e}")
         liste = []
         diff_lin = solution_df.shape[0] - result.shape[0]
-        for a in solution_df.columns:
-            if a not in result.columns:
-                liste.append(a)
+        for columns in solution_df.columns:
+            if columns not in result.columns:
+                liste.append(columns)
 
         if liste:
             st.write("il manque les colonnes suivantes : ")
-            for a in liste:
-                st.write(f"-------{a}")
+            for columns in liste:
+                st.write(f"-------{columns}")
         elif diff_lin != 0:
             st.write(f"il y a un écart de {diff_lin} lignes")
 
         else:
             st.write("Veuillez remonter cette erreur au support : support@support.com ")
+
 
 tab2, tab3 = st.tabs(("Tables", "Solution"))
 
