@@ -13,3 +13,32 @@ jobs:
           pip install black
       - run: |
           black --check --verbose .
+
+  pylintJob:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+      - run: |
+          python -m pip install --upgrade pip
+          pip install pylint
+          pip install duckdb
+          pip install streamlit
+          pip install pandas
+      - run: |
+          pylint **.py**
+
+  isortJob:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+      - run: |
+          python -m pip install --upgrade pip
+          pip install isort
+      - run: |
+          isort --check --verbose .
