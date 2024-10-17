@@ -19,7 +19,6 @@ data = {
 memory_state_df = pd.DataFrame(data)
 con.execute("CREATE TABLE IF NOT EXISTS memory_state AS SELECT * FROM memory_state_df")
 
-
 # ------------------------------------------------------------
 # CROSS JOIN EXERCISES
 # ------------------------------------------------------------
@@ -60,3 +59,5 @@ Lewis
 """
 trademarks = pd.read_csv(io.StringIO(CSV4))
 con.execute("CREATE TABLE IF NOT EXISTS trademarks AS SELECT * FROM trademarks")
+
+con.close()
