@@ -15,7 +15,7 @@ with st.sidebar:
     )
     if option:
         st.write(f"You selected : {option}")
-    exercise = con.execute(f"SELECT * FROM memory_state where theme = '{option}'").df()
+    exercise = con.execute(f"SELECT * FROM memory_state where theme = '{option}'").df().sort_values("last_review").reset_index()
     if not exercise.empty:
         st.dataframe(exercise)
         exercise_answer = exercise.loc[0, "answer"]
@@ -34,7 +34,7 @@ if query:
         result = result[solution_df.columns]
         check_df = result.compare(solution_df)
         if not check_df.empty:
-            st.dataframe()
+            st.dataframe(check_df)
     except KeyError as e:
         liste = []
         diff_lin = solution_df.shape[0] - result.shape[0]
