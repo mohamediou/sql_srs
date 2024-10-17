@@ -1,8 +1,19 @@
 # pylint: disable=(missing-module-docstring)
 
 
+import os
+import logging
+import subprocess
 import duckdb
 import streamlit as st
+
+if "data" not in os.listdir():
+    logging.debug("Create Folder Data")
+    logging.error("Create Folder Data")
+    os.mkdir("data")
+
+if "exercises_sql_tables.duckdb" not in os.listdir("data"):
+    subprocess.run(["python", "init_db.py"])
 
 con = duckdb.connect(database="data/exercises_sql_tables.duckdb", read_only=False)
 
@@ -15,7 +26,12 @@ with st.sidebar:
     )
     if option:
         st.write(f"You selected : {option}")
-    exercise = con.execute(f"SELECT * FROM memory_state where theme = '{option}'").df().sort_values("last_review").reset_index()
+    exercise = (
+        con.execute(f"SELECT * FROM memory_state where theme = '{option}'")
+        .df()
+        .sort_values("last_review")
+        .reset_index()
+    )
     if not exercise.empty:
         st.dataframe(exercise)
         exercise_answer = exercise.loc[0, "answer"]
